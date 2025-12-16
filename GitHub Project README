@@ -1,0 +1,60 @@
+The Unthrottled Home Network: AT&T Fiber & Netgear R8000 Setup
+Author: [Matthew Dixon/Musician2004i] Date: [12/01/2025] 
+Project Goal: To establish a high-performance, secure home network by bypassing the default AT&T Gateway functionality and 
+delegating all routing and Wi-Fi control to a powerful, owner-managed router (Netgear Nighthawk R8000).
+
+# 🌐 The Unthrottled Home Network: AT&T Fiber & Netgear R8000 Setup
+
+**Project by:** [Your Name/GitHub Handle]
+**Date:** [Current Date]
+**Goal:** Achieve maximum network control and performance by configuring the AT&T BGW320-505 in IP Passthrough mode, delegating all routing and Wi-Fi functionality to a powerful, owner-managed Netgear Nighthawk X6 R8000. This setup eliminates common ISP router limitations and improves security.
+
+## 💻 Project Prerequisites (The Gear)
+
+| Device | Role in the Network | Key Information |
+| :--- | :--- | :--- |
+| **AT&T BGW320-505** | Internet Service Provider (ISP) Gateway (The Fiber Converter) | ISP-provided device. Its role is minimized to pass the public internet IP. |
+| **Netgear Nighthawk X6 R8000** | Primary Router (The Brain) | Handles all Wi-Fi, DHCP, NAT, and security/firewall rules. |
+| **Bark Home** | Network Security/Parental Controls | Integrated device for enforcing content filtering. |
+| **Verizon Home 5G Router** | Backup/Redundancy | Used as an independent failover connection. |
+
+---
+
+## 🚀 Phase 1: Liberating the Internet IP (IP Passthrough)
+
+This critical phase forces the AT&T Gateway to stop acting as a router and only pass the public internet address to the Nighthawk. All configuration steps are detailed in the `phase1_att_config/passthrough_setup.txt` file.
+
+### Key Steps Summary
+
+1.  **Identify Nighthawk WAN MAC:** Obtain the MAC Address from the R8000 sticker.
+2.  **Re-IP the Gateway Subnet:** Move the BGW320 from `192.168.1.x` to a unique subnet (e.g., `192.168.2.254`) to prevent Double NAT conflicts with the Nighthawk.
+3.  **Enable IP Passthrough:** Configure the BGW320 to use `DHCPS-Fixed` mode and point it specifically to the Nighthawk's WAN MAC address.
+4.  **Disable Wi-Fi:** Turn off all Wi-Fi radio bands on the BGW320.
+5.  **Connect and Verify:** Connect the BGW320's LAN port to the Nighthawk's WAN port. Verify the Nighthawk receives the public IP.
+
+---
+
+## 🛡️ Phase 2: Network Hardening (Netgear Configuration)
+
+With the Nighthawk R8000 in control, we must secure it. All essential hardening steps are listed in the `phase2_netgear_hardening/security_checklist.md` file.
+
+### Key Hardening Areas
+
+* **Access Control:** Change default credentials and disable external access.
+* **Security Features:** Disable vulnerable services like UPnP and WPS.
+* **Wi-Fi Security:** Enforce WPA2-PSK (AES) or WPA3 and use strong, long passphrases.
+* **IoT Isolation:** Utilize the Guest Network feature to segment less secure IoT devices (smart plugs, sensors) away from sensitive computing devices.
+
+---
+
+## 🔗 Phase 3: Redundancy and Integration
+
+This phase covers integrating the security appliance (Bark Home) and establishing the backup internet connection. Detailed plans are in `phase3_redundancy/failover_plan.md`.
+
+### Bark Home Integration
+
+The Bark Home is physically connected to a **LAN port** on the **Nighthawk R8000**.  Because the Nighthawk is the DHCP server, the Bark Home can see and enforce rules on all connected devices.
+
+### Verizon 5G Failover
+
+The Verizon Router is kept completely separate and broadcasts its own distinct Wi-Fi SSID (e.g., `EMERGENCY-5G-Backup`). This allows for a **manual failover** procedure, ensuring internet connectivity during any AT&T service interruption.
